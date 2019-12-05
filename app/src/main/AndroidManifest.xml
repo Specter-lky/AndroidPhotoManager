@@ -23,6 +23,8 @@
             </intent-filter>
         </activity>
         <activity android:name="com.example.photoapp.CreateAlbumActivity" android:label="PhotoApp" />
+        <activity android:name="com.example.photoapp.EditAlbumActivity" android:label="PhotoApp" />
+        <activity android:name="com.example.photoapp.OpenAlbumActivity" android:label="PhotoApp" />
     </application>
 
 </manifest>

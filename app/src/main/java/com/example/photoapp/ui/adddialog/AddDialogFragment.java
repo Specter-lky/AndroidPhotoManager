@@ -11,10 +11,8 @@ import android.os.Bundle;
 
 import com.example.photoapp.CreateAlbumActivity;
 
-import static com.example.photoapp.MainActivity.*;
-
 /**
- * Add Photo/Album dialog fragment. Manages redirection to create album screen
+ * Add Photo/Album dialog fragment. Manages redirection to create album activity.
  *
  * @author Ryan Brandt
  */

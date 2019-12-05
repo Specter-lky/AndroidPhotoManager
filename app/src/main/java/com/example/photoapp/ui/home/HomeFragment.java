@@ -1,5 +1,6 @@
 package com.example.photoapp.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 
 import static com.example.photoapp.common.Helpers.*;
 
+import com.example.photoapp.EditAlbumActivity;
+import com.example.photoapp.OpenAlbumActivity;
 import com.example.photoapp.db.ApplicationDB;
 
 import com.example.photoapp.models.Album;
@@ -39,15 +42,17 @@ public class HomeFragment extends Fragment {
 
     private ArrayList<Album> albumList;
     private int activeAlbumId;
+    private String activeAlbumName;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+                             ViewGroup container, final Bundle savedInstanceState) {
         db = new ApplicationDB(getContext());
 
         this.homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
 
         activeAlbumId = -1;
+        activeAlbumName = null;
         albumList = new ArrayList<Album>();
         
         View root = inflater.inflate(R.layout.fragment_home, container, false);
@@ -72,10 +77,12 @@ public class HomeFragment extends Fragment {
         /**
          * Event Listeners
          */
+
         albumListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 activeAlbumId = albumList.get(position).getId();
+                activeAlbumName = albumList.get(position).getName();
                 view.setSelected(true);
             }
         });
@@ -85,7 +92,8 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 if(itemSelected()) {
                     db.deleteAlbum(activeAlbumId);
-                    homeViewModel.forceRefresh();
+
+                    clearSelection();
                 }
             }
         });
@@ -94,7 +102,12 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(itemSelected()) {
-                    // do stuff
+                    Intent editAlbumIntent  = new Intent(getContext(), EditAlbumActivity.class);
+                    editAlbumIntent.putExtra("albumName", activeAlbumName);
+                    editAlbumIntent.putExtra("albumId", activeAlbumId);
+
+                    clearSelection();
+                    startActivity(editAlbumIntent);
                 }
             }
         });
@@ -103,7 +116,12 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(itemSelected()) {
-                    // do stuff
+                    Intent openAlbumIntent = new Intent(getContext(), OpenAlbumActivity.class);
+                    openAlbumIntent.putExtra("albumName", activeAlbumName);
+                    openAlbumIntent.putExtra("albumId", activeAlbumId);
+
+                    clearSelection();
+                    startActivity(openAlbumIntent);
                 }
             }
         });
@@ -114,11 +132,19 @@ public class HomeFragment extends Fragment {
     /**
      * Utilities
      */
+
     private boolean itemSelected() {
         if(activeAlbumId == -1) {
             Toast.makeText(getContext(), "You need to select an album first.", Toast.LENGTH_LONG).show();
             return false;
         }
         return true;
+    }
+
+    private void clearSelection() {
+        activeAlbumName = null;
+        activeAlbumId = -1;
+
+        homeViewModel.forceRefresh();
     }
 }
