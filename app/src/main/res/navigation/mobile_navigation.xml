@@ -17,10 +17,4 @@
         android:label="Photo List"
         tools:layout="@layout/fragment_photo_gallery" />
 
-    <fragment
-        android:id="@+id/nav_album_gallery"
-        android:name="com.example.photoapp.ui.albumgallery.AlbumGalleryFragment"
-        android:label="Album List"
-        tools:layout="@layout/fragment_album_gallery" />
-
 </navigation>

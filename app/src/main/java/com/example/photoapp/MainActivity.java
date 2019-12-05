@@ -1,8 +1,5 @@
 package com.example.photoapp;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -10,7 +7,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.view.View;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -25,31 +21,38 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
-import android.widget.Toast;
 
 import com.example.photoapp.ui.adddialog.AddDialogFragment;
 
+import static com.example.photoapp.common.ContextProvider.*;
+
+/**
+ * App main activity, provides Album List, Photo List, associated Fragments and routing
+ * to other activities.
+ *
+ * @author Ryan Brandt
+ */
 public class MainActivity extends AppCompatActivity {
-    private static final int PHOTO_GALLERY_REQUEST = 1;
 
     private AppBarConfiguration mAppBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContext(this);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
 
-        // show add item dialog
+        // show add album dialog
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 DialogFragment addDialog = new AddDialogFragment();
                 addDialog.show(ft, "dialog");
-            }
+            } 
         });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_photo_gallery, R.id.nav_album_gallery)
+                R.id.nav_home, R.id.nav_photo_gallery)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -79,20 +82,5 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    @Override
-    public void onActivityResult(int reqCode, int resultCode, Intent data) {
-        super.onActivityResult(reqCode, resultCode, data);
-
-        if(reqCode == PHOTO_GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
-            try {
-                final Uri imageUri = data.getData();
-                // write photo to databse
-            } catch (Exception e) {
-                Toast.makeText(this, "Something went wrong!", Toast.LENGTH_LONG).show();
-            }
-        } else {
-            Toast.makeText(this, "You didn't pick an image", Toast.LENGTH_LONG).show();
-        }
-    }
 
 }
