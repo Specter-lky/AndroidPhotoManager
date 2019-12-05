@@ -44,8 +44,8 @@ public class EditAlbumActivity extends AppCompatActivity {
         activeAlbumId = extras.getInt("albumId");
         activeAlbumName = extras.getString("albumName");
 
-        submitButton = (Button)findViewById(R.id.edit_album_submit);
-        editedAlbumName = (EditText)findViewById(R.id.edit_album_name);
+        submitButton = findViewById(R.id.edit_album_submit);
+        editedAlbumName = findViewById(R.id.edit_album_name);
 
         editedAlbumName.setText(activeAlbumName);
 

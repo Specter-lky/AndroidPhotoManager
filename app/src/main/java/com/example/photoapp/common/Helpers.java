@@ -10,6 +10,7 @@ import android.content.Context;
 import com.example.photoapp.models.Album;
 
 import com.example.photoapp.db.ApplicationDB;
+import com.example.photoapp.models.Photo;
 
 import java.util.ArrayList;
 
@@ -60,6 +61,22 @@ public final class Helpers {
         }
 
         return true;
+    }
+
+    /**
+     * Helper read query data in a list of Photo instances
+     *
+     * @param data A cursor pointing at Photo rows
+     * @return An ArrayList containing the corresponding data in Photo objects
+     */
+    public static ArrayList<Photo> getPhotoList(Cursor data) {
+        ArrayList<Photo> photos = new ArrayList<>();
+
+        while(data.moveToNext()) {
+            photos.add(new Photo(data.getInt(0), data.getInt(1), data.getString(2), data.getString(3)));
+        }
+
+        return photos;
     }
 
 }

@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -25,6 +26,7 @@
         <activity android:name="com.example.photoapp.CreateAlbumActivity" android:label="PhotoApp" />
         <activity android:name="com.example.photoapp.EditAlbumActivity" android:label="PhotoApp" />
         <activity android:name="com.example.photoapp.OpenAlbumActivity" android:label="PhotoApp" />
+        <activity android:name="com.example.photoapp.PhotoDisplayActivity" android:label="PhotoApp" />
     </application>
 
 </manifest>

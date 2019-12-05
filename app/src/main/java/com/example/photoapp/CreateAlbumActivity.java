@@ -39,8 +39,8 @@ public class CreateAlbumActivity extends AppCompatActivity {
 
         db = new ApplicationDB(this);
 
-        submitButton = (Button)findViewById(R.id.create_album_submit);
-        newAlbumName = (EditText)findViewById(R.id.create_album_name);
+        submitButton = findViewById(R.id.create_album_submit);
+        newAlbumName = findViewById(R.id.create_album_name);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override

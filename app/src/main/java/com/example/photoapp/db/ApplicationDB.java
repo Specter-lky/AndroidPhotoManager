@@ -4,9 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.example.photoapp.models.Photo;
 
 /**
  * Application database utility
@@ -81,6 +84,7 @@ public class ApplicationDB extends SQLiteOpenHelper {
     /**
      * Album CRUD
      */
+
     public boolean createAlbum(String albumName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -126,6 +130,57 @@ public class ApplicationDB extends SQLiteOpenHelper {
     /**
      * Photo CRUD
      */
+
+    public boolean createPhoto(int albumId, String path) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put("album_id", albumId);
+        values.put("path", path);
+        values.put("caption", "");
+
+        Log.d(TAG, "Inserting photo " + path + " into album" + albumId);
+
+        long result = db.insert(PHOTOS, null, values);
+
+        db.close();
+        return result == -1 ? false: true;
+    }
+
+    public void editPhoto(int id, String updatedCaption) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put("caption", updatedCaption);
+
+        db.update(PHOTOS, values, "id = ?", new String [] {String.valueOf(id)});
+        db.close();
+    }
+
+    public void deletePhoto(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(PHOTOS, "id = ?", new String[] {String.valueOf(id)});
+        db.close();
+    }
+
+    public Cursor readPhotosByAlbum(int albumId) {
+        readableDb = this.getReadableDatabase();
+        final String selectByAlbumSql = "SELECT * FROM " + PHOTOS + " WHERE album_id = " + albumId;
+
+        Cursor result = readableDb.rawQuery(selectByAlbumSql, null);
+
+        return result;
+    }
+
+    public Cursor readPhotos() {
+        readableDb = this.getReadableDatabase();
+        final String selectAllSql = "SELECT * FROM " + PHOTOS;
+
+        Cursor result = readableDb.rawQuery(selectAllSql, null);
+
+        return result;
+    }
 
 
     /**

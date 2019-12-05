@@ -6,12 +6,11 @@ public class Photo {
     private int id;
     private int albumId;
 
-    public Photo(int id,int albumId,String path, String caption){
+    public Photo(int id, int albumId, String path, String caption){
         this.id = id;
         this.albumId = albumId;
         this.path = path;
         this.caption = caption;
-
     }
 
     public String getPath(){
@@ -28,5 +27,9 @@ public class Photo {
 
     public int getAlbumID() {
         return albumId;
+    }
+
+    public String toString() {
+        return path;
     }
 }
