@@ -83,7 +83,7 @@ public class OpenAlbumActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent photoPickerIntent = new Intent();
                 photoPickerIntent.setType("image/*");
-                photoPickerIntent.setAction(Intent.ACTION_PICK);
+                photoPickerIntent.setAction(Intent.ACTION_OPEN_DOCUMENT);
                 startActivityForResult(photoPickerIntent, PHOTO_PICKER_REQUEST);
             }
         });

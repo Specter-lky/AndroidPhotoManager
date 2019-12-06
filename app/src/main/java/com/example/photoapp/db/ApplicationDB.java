@@ -22,7 +22,7 @@ public class ApplicationDB extends SQLiteOpenHelper {
 
     private static final String ALBUMS = "Album";
     private static final String PHOTOS = "Photo";
-    private static final String TAG_TYPES = "Tag_Types";
+    private static final String TAG_TYPES = "Tag_Type";
     private static final String TAGS = "Tag";
 
     private SQLiteDatabase readableDb;
@@ -45,7 +45,7 @@ public class ApplicationDB extends SQLiteOpenHelper {
                                         "album_id INTEGER," +
                                         "path TEXT," +
                                         "caption TEXT," +
-                                        "CONSTRAINT fk_photos_album FOREIGN KEY(album_id) REFERENCES Albums(id) ON DELETE CASCADE" +
+                                        "CONSTRAINT fk_photos_album FOREIGN KEY(album_id) REFERENCES Album(id) ON DELETE CASCADE" +
                                       ");";
 
         final String createTagTypesSql = "CREATE TABLE " +
@@ -58,8 +58,10 @@ public class ApplicationDB extends SQLiteOpenHelper {
                                       TAGS +"(" +
                                         "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                                         "type_id INTEGER," +
+                                        "photo_id INTEGER," +
                                         "value TEXT," +
-                                        "CONSTRAINT fk_tags_tag_type FOREIGN KEY(id) REFERENCES Tag_Type(id) ON DELETE CASCADE" +
+                                        "CONSTRAINT fk_tags_tag_type FOREIGN KEY(type_id) REFERENCES Tag_Type(id) ON DELETE CASCADE," +
+                                        "CONSTRAINT fk_tags_photo FOREIGN KEY(photo_id) REFERENCES Photo(id) ON DELETE CASCADE" +
                                       ");";
 
         db.execSQL(createAlbumSql);
@@ -67,7 +69,7 @@ public class ApplicationDB extends SQLiteOpenHelper {
         db.execSQL(createTagTypesSql);
         db.execSQL(createTagsSql);
 
-        final String insertTagTypesSql = "INSERT INTO Tag_Types (name) VALUES ('Location'), ('Person');";
+        final String insertTagTypesSql = "INSERT INTO Tag_Type (name) VALUES ('Location'), ('Person');";
         db.execSQL(insertTagTypesSql);
     }
 
@@ -79,6 +81,11 @@ public class ApplicationDB extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TAG_TYPES);
 
         onCreate(sqLiteDatabase);
+    }
+
+    @Override
+    public void onOpen(SQLiteDatabase sqLiteDatabase) {
+        sqLiteDatabase.execSQL("PRAGMA foreign_keys = ON");
     }
 
     /**
@@ -137,7 +144,7 @@ public class ApplicationDB extends SQLiteOpenHelper {
 
         values.put("album_id", albumId);
         values.put("path", path);
-        values.put("caption", "");
+        values.put("caption", "your caption");
 
         Log.d(TAG, "Inserting photo " + path + " into album" + albumId);
 
@@ -180,6 +187,44 @@ public class ApplicationDB extends SQLiteOpenHelper {
         Cursor result = readableDb.rawQuery(selectAllSql, null);
 
         return result;
+    }
+
+    /**
+     * Tag CRUD
+     */
+    public void createTag(int photoId, String value, String type) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        final String insertTagSql = "INSERT INTO " + TAGS +
+                                    "(" +
+                                        "type_id," +
+                                        "photo_id," +
+                                        "value" +
+                                    ")" +
+                                    "VALUES" +
+                                    "(" +
+                                        "(SELECT id FROM " + TAG_TYPES + " WHERE name = " + "'" + type + "'" + ")," +
+                                         photoId + "," +
+                                        "'" + value + "'" +
+                                    ");";
+
+        Log.d(TAG, insertTagSql);
+        db.execSQL(insertTagSql);
+        db.close();
+    }
+
+    public void deleteTag(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(TAGS, "id = ?", new String[] {String.valueOf(id)});
+        db.close();
+    }
+
+    public Cursor readTagsByPhoto(int photoId) {
+        readableDb = this.getReadableDatabase();
+        final String selectPhotoTagsSql = "SELECT t.id, tt.name, t.value FROM " + TAGS + " AS t JOIN " + TAG_TYPES + " AS tt ON t.type_id = tt.id WHERE t.photo_id = " + photoId;
+
+        Cursor data = readableDb.rawQuery(selectPhotoTagsSql, null);
+        return data;
     }
 
 

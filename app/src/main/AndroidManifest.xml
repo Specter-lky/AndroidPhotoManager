@@ -27,6 +27,7 @@
         <activity android:name="com.example.photoapp.EditAlbumActivity" android:label="PhotoApp" />
         <activity android:name="com.example.photoapp.OpenAlbumActivity" android:label="PhotoApp" />
         <activity android:name="com.example.photoapp.PhotoDisplayActivity" android:label="PhotoApp" />
+        <activity android:name="com.example.photoapp.CreateTagActivity" android:label="PhotoApp" />
     </application>
 
 </manifest>
