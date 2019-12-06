@@ -7,4 +7,4 @@ Persists data with SQLite.
 
 Nothing exciting here.
 
-![Screenshot_1575611289](https://user-images.githubusercontent.com/37029617/70299223-4a8bed80-17c2-11ea-8112-fa27b0618bf1.png)
+<img width="291" alt="Screen Shot 2019-12-06 at 12 55 38 AM" src="https://user-images.githubusercontent.com/37029617/70299545-2da3ea00-17c3-11ea-8170-e240b369afef.png">
