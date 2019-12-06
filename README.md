@@ -2,6 +2,7 @@
 Pretty lame CRUD android app I had to build according to a specification for a university course.
 
 Allows a single user to create and manage photo albums,tag photos, filter photos by tags, captions photos...
+
 Persists data with SQLite.
 
 Nothing exciting here.
