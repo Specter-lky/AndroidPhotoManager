@@ -24,7 +24,7 @@ public final class Album {
     }
 
     public String toString(){
-        return "Album - ID: "+id+" Name: "+name;
+        return "Album: " + name;
     }
 
 }

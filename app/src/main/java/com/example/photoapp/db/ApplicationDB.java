@@ -11,6 +11,8 @@ import android.util.Log;
 
 import com.example.photoapp.models.Photo;
 
+import java.util.ArrayList;
+
 /**
  * Application database utility
  */
@@ -225,6 +227,26 @@ public class ApplicationDB extends SQLiteOpenHelper {
 
         Cursor data = readableDb.rawQuery(selectPhotoTagsSql, null);
         return data;
+    }
+
+    public Cursor readFilteredPhotoIds(String[] tagValues) {
+        readableDb = this.getReadableDatabase();
+        String selectLikeTagsSql = "SELECT p.id FROM " + PHOTOS + " AS p JOIN " + TAGS + " AS t ON t.photo_id = p.id WHERE";
+
+        boolean isFirst = true;
+        for( String v : tagValues ) {
+            if(isFirst) {
+                selectLikeTagsSql += " t.value LIKE '%" + v + "%'";
+                isFirst = false;
+            } else {
+                selectLikeTagsSql += " OR t.value LIKE '%" + v + "%'";
+            }
+        }
+        selectLikeTagsSql += ";";
+
+        Cursor data = readableDb.rawQuery(selectLikeTagsSql, null);
+
+        return  data;
     }
 
 

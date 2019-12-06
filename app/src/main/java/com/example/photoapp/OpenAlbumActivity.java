@@ -146,7 +146,8 @@ public class OpenAlbumActivity extends AppCompatActivity {
         photoArrList = getPhotoList(data);
 
         db.closeReadable();
-        populateListView(this, R.layout.photo, albumPhotoListView, photoArrList);
+        ImageThumbnailAdapter adapter = new ImageThumbnailAdapter(this, R.layout.photo_thumbnail, photoArrList);
+        albumPhotoListView.setAdapter(adapter);
     }
 
     private boolean itemSelected() {

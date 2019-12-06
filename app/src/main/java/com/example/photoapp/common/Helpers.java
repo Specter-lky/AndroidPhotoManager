@@ -1,7 +1,6 @@
 package com.example.photoapp.common;
 
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
 
@@ -11,6 +10,7 @@ import com.example.photoapp.models.Album;
 
 import com.example.photoapp.db.ApplicationDB;
 import com.example.photoapp.models.Photo;
+import com.example.photoapp.models.Tag;
 
 import java.util.ArrayList;
 
@@ -24,7 +24,7 @@ public final class Helpers {
     private Helpers() {}
 
     /**
-     * ListView population helper
+     * Generic ListView population helper
      *
      * @param context Current activity context
      * @param lv ListView instance to be populated
@@ -64,7 +64,7 @@ public final class Helpers {
     }
 
     /**
-     * Helper read query data in a list of Photo instances
+     * Helper to read query data in a list of Photo instances
      *
      * @param data A cursor pointing at Photo rows
      * @return An ArrayList containing the corresponding data in Photo objects
@@ -77,6 +77,22 @@ public final class Helpers {
         }
 
         return photos;
+    }
+
+    /**
+     * Helper to read query data into a list of Tag instances
+     *
+     * @param data A cursor pointing at Tag rows
+     * @return An ArrayList containg the corresponding data in Tag objects
+     */
+    public static ArrayList<Tag> getTagList(Cursor data) {
+        ArrayList<Tag> tags = new ArrayList<>();
+
+        while(data.moveToNext()) {
+            tags.add(new Tag(data.getInt(0), data.getString(1), data.getString(2)));
+        }
+
+        return tags;
     }
 
 }

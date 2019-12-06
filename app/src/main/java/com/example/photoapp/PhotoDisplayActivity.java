@@ -74,7 +74,7 @@ public class PhotoDisplayActivity extends AppCompatActivity {
         activeAlbumId = extras.getInt("albumId");
 
         db = new ApplicationDB(this);
-        albumPhotoList = getPhotoList(db.readPhotosByAlbum(activeAlbumId));
+        albumPhotoList = activeAlbumId == -1 ? new ArrayList<Photo>() : getPhotoList(db.readPhotosByAlbum(activeAlbumId));
         db.closeReadable();
 
         photoDisplay = findViewById(R.id.photo_display);
@@ -185,15 +185,16 @@ public class PhotoDisplayActivity extends AppCompatActivity {
         } else if (activePhotoIndex > 0 && !slidePrev.isEnabled()) {
             slidePrev.setEnabled(true);
         }
+
+        if(albumPhotoList.isEmpty()) {
+            slidePrev.setEnabled(false);
+            slideNext.setEnabled(false);
+        }
     }
 
     private void loadTags() {
         Cursor data = db.readTagsByPhoto(activePhotoId);
-        tagArrList = new ArrayList<>();
-
-        while(data.moveToNext()) {
-            tagArrList.add(new Tag(data.getInt(0), data.getString(1), data.getString(2)));
-        }
+        tagArrList = getTagList(data);
 
         populateListView(this, R.layout.tag, tagListView, tagArrList);
         db.closeReadable();
