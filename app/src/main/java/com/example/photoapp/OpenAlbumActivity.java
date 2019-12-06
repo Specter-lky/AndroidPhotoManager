@@ -36,6 +36,7 @@ public class OpenAlbumActivity extends AppCompatActivity {
 
     private int activePhotoId;
     private String activePhotoPath;
+    private int activePhotoIndex;
 
     private String activeAlbumName;
     private int activeAlbumId;
@@ -68,6 +69,7 @@ public class OpenAlbumActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 activePhotoId = photoArrList.get(position).getID();
                 activePhotoPath = photoArrList.get(position).getPath();
+                activePhotoIndex = position;
                 view.setSelected(true);
             }
         });
@@ -103,6 +105,8 @@ public class OpenAlbumActivity extends AppCompatActivity {
                     Intent photoDisplayIntent = new Intent(OpenAlbumActivity.this, PhotoDisplayActivity.class);
                     photoDisplayIntent.putExtra("photoUri", Uri.parse(activePhotoPath));
                     photoDisplayIntent.putExtra("photoId", activePhotoId);
+                    photoDisplayIntent.putExtra("photoIndex", activePhotoIndex);
+                    photoDisplayIntent.putExtra("albumId", activeAlbumId);
                     startActivity(photoDisplayIntent);
                 }
             }
@@ -156,6 +160,7 @@ public class OpenAlbumActivity extends AppCompatActivity {
     private void clearSelection() {
         loadAlbumPhotos();
         activePhotoId = -1;
+        activePhotoIndex = -1;
         activePhotoPath = null;
     }
 
